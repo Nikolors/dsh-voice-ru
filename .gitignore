@@ -1,0 +1,14 @@
+# клипы и кадры — они большие и делаются из своего портрета
+avatar/_clips/
+avatar/_rec/
+avatar/_call/
+avatar/_phrases.txt
+avatar/*.log
+
+# личные ключи и настройки
+*.key
+threed/qwen-key.txt
+
+# служебное
+__pycache__/
+*.pyc

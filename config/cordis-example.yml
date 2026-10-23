@@ -1,0 +1,48 @@
+# Пример настроек профиля DSH
+
+Фрагмент `cordis.patch.yml`, который у нас работает. Не копируйте целиком —
+возьмите нужные строки и подставьте свои пути.
+
+```yaml
+- id: dsh-voice
+  name: "@goodandready/dsh-voice"
+  config:
+    localOnly: true
+    ffmpegBin: '<DSH_VOICE>/ffmpeg/bin/ffmpeg.exe'
+    sensevoiceUrl: 'http://127.0.0.1:6006/api/v1/asr'
+    sensevoiceAutostart: false
+    bargeIn: true
+    # «Рация» отключена: в разговорном режиме она мешает (см. patches/05)
+    hotkey: ''
+    allowedAudioDirs:
+      - '<DSH_VOICE>'
+      - '<WORKSPACE>'
+
+- id: dsh-tts
+  name: "@goodandready/dsh-tts"
+  config:
+    # Короткая фраза перед запросом разрешения вместо чтения диалога
+    announceApproval: true
+    approvalText: 'Требуется разрешение'
+    # Читаем ответ по мере поступления
+    speakAsItGoes: true
+    voiceDuplexEnabled: true
+    bargeIn: true
+```
+
+## Пороги распознавания (в плагине разговорного режима)
+
+```js
+speechRms: 0.04,      // что считать речью при прослушивании
+minSubmitRms: 0.035,  // тише — это шум, а не сообщение
+silenceMs: 4200,      // сколько ждать тишины до конца фразы
+```
+
+Поднимали пороги после того, как случайный шум уходил в чат как сообщение.
+
+## Чего избегать
+
+- Не выставляйте `hotkey: 'Control'` (значение по умолчанию): обработчик
+  работает в фазе перехвата и съедает все сочетания с Ctrl.
+- Не включайте одновременно «рацию» и разговорный режим: они борются за
+  микрофон.

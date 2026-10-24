@@ -14,6 +14,25 @@
 | [`patches/04-barge-thresholds.md`](patches/04-barge-thresholds.md) | пороги перебивания: как и почему они подняты |
 | [`patches/05-approval-voice.md`](patches/05-approval-voice.md) | фраза «Требуется разрешение» вслух, с русскими названиями инструментов |
 | [`config/cordis-example.yml`](config/cordis-example.yml) | пример настроек профиля, который у нас работает |
+| [`patches/06-end-of-utterance.md`](patches/06-end-of-utterance.md) | длинные фразы не обрываются на паузе (4,2 с тишины, досрочный конец — 1,6 с) |
+| [`patches/07-level-hysteresis.md`](patches/07-level-hysteresis.md) | одиночный щелчок не считается речью; шумоподавление и автогромкость микрофона |
+| [`patches/08-pronunciation.md`](patches/08-pronunciation.md) | ударения в озвучке: словарь `pronunciation` в профиле |
+
+## Что ещё лежит в репозитории
+
+- [`server/gigaam-server.mjs`](server/gigaam-server.mjs) — наш сервер
+  распознавания GigaAM: обёртка над `sherpa-onnx-node`, сам ставит знаки
+  препинания, исправляет «почти правильные» слова по частотному словарю и
+  меняет точку на вопрос, когда фраза звучит как вопрос. Инструкция —
+  [`server/README.md`](server/README.md). Веса модели в репозиторий не входят.
+- [`tools/edge-warm-server.py`](tools/edge-warm-server.py) — тёплый воркер
+  озвучки на edge-tts: один процесс вместо запуска CLI на каждую фразу,
+  экономит около двух секунд на реплику. Работает по HTTP на localhost:
+  `POST /tts {"text": "..."}` → mp3.
+
+**Главная осторожность:** процессы, запущенные из сессии помощника, гаснут
+вместе с ней. Сервер распознавания и воркер озвучки надо запускать
+автозагрузкой (`.vbs` в папке Startup), а не из команды.
 
 ## Как накладывать
 
